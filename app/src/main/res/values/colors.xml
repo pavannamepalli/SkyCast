@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="matte_black">#FF28282B</color>
+    <color name="search_bar_hint_text_background">#FFFDFCFC</color>
+
 
 
 </resources>
