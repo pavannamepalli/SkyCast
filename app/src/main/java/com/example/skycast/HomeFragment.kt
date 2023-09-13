@@ -37,15 +37,22 @@ class HomeFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.progressIndicator.visibility=View.VISIBLE
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
+
+
+
+
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 if (locationResult != null) {
                     val location = locationResult.lastLocation
                     if (location != null) {
+                        binding.progressIndicator.visibility=View.GONE
                         val latitude = location.latitude
                         val longitude = location.longitude
+
                         showToast("Latitude: $latitude\nLongitude: $longitude")
                     }
                 }
