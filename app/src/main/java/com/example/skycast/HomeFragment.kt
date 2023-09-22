@@ -14,7 +14,12 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.skycast.databinding.FragmentHomeBinding
+import com.example.skycast.ui.viewmodel.GetLocationViewModel
+import com.example.skycast.utils.NoInternetDialogFragment
+import com.example.skycast.utils.Resource
+import com.example.skycast.viewmodelfactory.PostViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -27,6 +32,8 @@ class HomeFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: FragmentHomeBinding
     private lateinit var locationCallback: LocationCallback
+    private lateinit var viewModel: GetLocationViewModel
+    private var isLocationUpdateReceived = false
 
     private val REQUEST_LOCATION_PERMISSION = 123
     private val REQUEST_GPS_SETTINGS = 456
@@ -37,32 +44,80 @@ class HomeFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.progressIndicator.visibility=View.VISIBLE
+        binding.progressIndicator.visibility = View.VISIBLE
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
+        viewModel = ViewModelProvider(
+            this,
+            PostViewModelFactory(this.requireActivity().applicationContext)
+        ).get(GetLocationViewModel::class.java)
+
+        initLocationCallback()
+        requestLocationPermissionAndFetchLocation()
+        fetchLocationDetails()
 
 
 
 
+
+
+
+        return binding.root
+    }
+
+    private fun fetchLocationDetails() {
+
+        viewModel.locationLiveData.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    // Handle success and update UI
+                    val locationData = resource.data
+                    showToast(locationData.SupplementalAdminAreas[1].EnglishName)
+                }
+
+                is Resource.Error -> {
+                    // Handle error
+                    val errorMessage = resource.message
+                    if (errorMessage == "No internet connection") {
+                        // Show the NoInternetDialogFragment
+                        val dialogFragment = NoInternetDialogFragment.newInstance()
+                        activity?.let {
+                            dialogFragment.show(
+                                it.supportFragmentManager,
+                                "NoInternetDialog"
+                            )
+                        }
+                    } else {
+                        // Handle other errors
+                    }
+                }
+
+                is Resource.Loading -> {
+                    // Handle loading state, e.g., show a progress bar
+                }
+
+
+            }
+        }
+    }
+
+    private fun initLocationCallback() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                if (locationResult != null) {
+                if (!isLocationUpdateReceived) {
                     val location = locationResult.lastLocation
                     if (location != null) {
-                        binding.progressIndicator.visibility=View.GONE
-                        val latitude = location.latitude
-                        val longitude = location.longitude
+                        binding.progressIndicator.visibility = View.GONE
+                        val latitude = location.latitude.toString()
+                        val longitude = location.longitude.toString()
+                        viewModel.getLocalLocationDetails(latitude, longitude)
 
-                        showToast("Latitude: $latitude\nLongitude: $longitude")
+                        //   showToast("Latitude: $latitude\nLongitude: $longitude")
+                        isLocationUpdateReceived = true
                     }
                 }
             }
         };
-
-        requestLocationPermissionAndFetchLocation()
-
-
-        return binding.root
     }
 
     private fun requestLocationPermissionAndFetchLocation() {
@@ -75,8 +130,7 @@ class HomeFragment : Fragment() {
                 arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_LOCATION_PERMISSION
             )
-        }
-        else {
+        } else {
             checkAndFetchLocation()
         }
     }
@@ -114,7 +168,7 @@ class HomeFragment : Fragment() {
         ) {
             return
         } else {
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback!!, null)
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
         }
     }
 
@@ -141,14 +195,12 @@ class HomeFragment : Fragment() {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkAndFetchLocation()
             } else {
-                    showToast("Location permission denied.")
-                }
+                showToast("Location permission denied.")
             }
         }
+    }
 
 
-
-    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_GPS_SETTINGS) {
