@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="matte_black">#FF28282B</color>
+    <color name="matte_black">#FF0B131E</color>
+    <color name="search_bar_hint_text_background">#FFFDFCFC</color>
+
 
 
 </resources>
