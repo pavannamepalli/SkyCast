@@ -4,19 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/matte_black"
+    android:background="@color/black"
     tools:context=".HomeFragment">
 
-<!--    <androidx.appcompat.widget.SearchView-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="40dp"-->
-
-<!--        android:layout_marginHorizontal="30dp"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        app:searchViewStyle="@style/CustomSearchViewStyle"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"/>-->
+        <TextView
+            android:id="@+id/locTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="Location Title"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/tempImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/locTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/ic_cloudy"/>
+    <TextView
+        android:id="@+id/tempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Location Title"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tempImage"/>
 
     <ProgressBar
         android:id="@+id/progressIndicator"

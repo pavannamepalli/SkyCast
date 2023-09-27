@@ -56,12 +56,6 @@ class HomeFragment : Fragment() {
         requestLocationPermissionAndFetchLocation()
         fetchLocationDetails()
 
-
-
-
-
-
-
         return binding.root
     }
 
@@ -72,7 +66,9 @@ class HomeFragment : Fragment() {
                 is Resource.Success -> {
                     // Handle success and update UI
                     val locationData = resource.data
-                    showToast(locationData.SupplementalAdminAreas[1].EnglishName)
+                    //showToast(locationData.SupplementalAdminAreas[1].EnglishName)
+                    binding.locTitle.text=locationData.SupplementalAdminAreas[1].EnglishName
+                    viewModel.getCurrentWeather(locationData.Key)
                 }
 
                 is Resource.Error -> {
@@ -99,6 +95,41 @@ class HomeFragment : Fragment() {
 
             }
         }
+
+        viewModel.getCurrentTempLiveData.observe(viewLifecycleOwner){ resource ->
+            when (resource) {
+                is Resource.Success -> {
+                    // Handle success and update UI
+                    val currentTempData = resource.data
+                     //showToast("pavan"+currentTempData[0].Temperature.Metric.Value.toString())
+                    binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()
+                }
+
+                is Resource.Error -> {
+                    // Handle error
+                    val errorMessage = resource.message
+                    if (errorMessage == "No internet connection") {
+                        // Show the NoInternetDialogFragment
+                        val dialogFragment = NoInternetDialogFragment.newInstance()
+                        activity?.let {
+                            dialogFragment.show(
+                                it.supportFragmentManager,
+                                "NoInternetDialog"
+                            )
+                        }
+                    } else {
+                        // Handle other errors
+                    }
+                }
+
+                is Resource.Loading -> {
+                    // Handle loading state, e.g., show a progress bar
+                }
+
+
+            }
+
+        }
     }
 
     private fun initLocationCallback() {
@@ -111,8 +142,6 @@ class HomeFragment : Fragment() {
                         val latitude = location.latitude.toString()
                         val longitude = location.longitude.toString()
                         viewModel.getLocalLocationDetails(latitude, longitude)
-
-                        //   showToast("Latitude: $latitude\nLongitude: $longitude")
                         isLocationUpdateReceived = true
                     }
                 }
@@ -175,6 +204,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         requestLocationPermissionAndFetchLocation()
+        fetchLocationDetails()
     }
 
     private fun isGPSEnabled(): Boolean {
