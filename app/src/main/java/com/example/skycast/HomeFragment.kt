@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
                 is Resource.Success -> {
                     // Handle success and update UI
                     val locationData = resource.data
-                    //showToast(locationData.SupplementalAdminAreas[1].EnglishName)
+                    showToast(locationData.SupplementalAdminAreas[1].EnglishName)
                     binding.locTitle.text=locationData.SupplementalAdminAreas[1].EnglishName
                     viewModel.getCurrentWeather(locationData.Key)
                 }
@@ -103,6 +103,12 @@ class HomeFragment : Fragment() {
                     val currentTempData = resource.data
                      //showToast("pavan"+currentTempData[0].Temperature.Metric.Value.toString())
                     binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()
+
+                    if(currentTempData[0].WeatherText == "Cloudy"){
+                        binding.tempImage.setImageResource(R.drawable.ic_sunny_cloudy)
+                    } else if (currentTempData[0].WeatherText == "Mostly cloudy"){
+                        binding.tempImage.setImageResource(R.drawable.ic_cloudy)
+                    }
                 }
 
                 is Resource.Error -> {
