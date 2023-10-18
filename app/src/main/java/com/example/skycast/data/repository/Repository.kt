@@ -19,7 +19,7 @@ class Repository(private val apiService: ApiService) {
                     Resource.Error("Empty response", null)
                 }
             } else {
-                Resource.Error("Error loading posts", null)
+                Resource.Error(response.message(), null)
             }
         } catch (e: Exception) {
             Resource.Error("Network error: ${e.message}", null)

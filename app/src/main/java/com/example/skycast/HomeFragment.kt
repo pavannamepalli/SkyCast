@@ -33,6 +33,8 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var locationCallback: LocationCallback
     private lateinit var viewModel: GetLocationViewModel
+    private lateinit var latitude: String
+    private lateinit var longitude: String
     private var isLocationUpdateReceived = false
 
     private val REQUEST_LOCATION_PERMISSION = 123
@@ -45,6 +47,12 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.progressIndicator.visibility = View.VISIBLE
+        binding.refreshTemp.setOnClickListener {
+            println("pavan 1 ")
+            requestLocationPermissionAndFetchLocation()
+            fetchLocationDetails()
+            viewModel.getLocalLocationDetails(latitude, longitude)
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
         viewModel = ViewModelProvider(
@@ -66,7 +74,7 @@ class HomeFragment : Fragment() {
                 is Resource.Success -> {
                     // Handle success and update UI
                     val locationData = resource.data
-                    showToast(locationData.SupplementalAdminAreas[1].EnglishName)
+                    println("pavan 2"+locationData.SupplementalAdminAreas[1].EnglishName)
                     binding.locTitle.text=locationData.SupplementalAdminAreas[1].EnglishName
                     viewModel.getCurrentWeather(locationData.Key)
                 }
@@ -85,6 +93,7 @@ class HomeFragment : Fragment() {
                         }
                     } else {
                         // Handle other errors
+                        showToast(errorMessage)
                     }
                 }
 
@@ -101,13 +110,13 @@ class HomeFragment : Fragment() {
                 is Resource.Success -> {
                     // Handle success and update UI
                     val currentTempData = resource.data
-                     //showToast("pavan"+currentTempData[0].Temperature.Metric.Value.toString())
-                    binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()
+                    println("pavan 3"+currentTempData[0].Temperature.Metric.Value.toString())
+                    binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()+" \u2103"
 
-                    if(currentTempData[0].WeatherText == "Cloudy"){
+                    if(currentTempData[0].WeatherText.contains("rainy",true) ){
+                        binding.tempImage.setImageResource(R.drawable.ic_rainy)
+                    } else {
                         binding.tempImage.setImageResource(R.drawable.ic_sunny_cloudy)
-                    } else if (currentTempData[0].WeatherText == "Mostly cloudy"){
-                        binding.tempImage.setImageResource(R.drawable.ic_cloudy)
                     }
                 }
 
@@ -145,8 +154,8 @@ class HomeFragment : Fragment() {
                     val location = locationResult.lastLocation
                     if (location != null) {
                         binding.progressIndicator.visibility = View.GONE
-                        val latitude = location.latitude.toString()
-                        val longitude = location.longitude.toString()
+                        latitude= location.latitude.toString()
+                         longitude = location.longitude.toString()
                         viewModel.getLocalLocationDetails(latitude, longitude)
                         isLocationUpdateReceived = true
                     }
@@ -212,6 +221,8 @@ class HomeFragment : Fragment() {
         requestLocationPermissionAndFetchLocation()
         fetchLocationDetails()
     }
+
+
 
     private fun isGPSEnabled(): Boolean {
         val locationManager =
