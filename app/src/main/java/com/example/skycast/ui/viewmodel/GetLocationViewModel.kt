@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.skycast.data.model.currentcondition.CurrentTemp
+import com.example.skycast.data.model.dailyforcast.DailyForcast
 import com.example.skycast.data.model.geoposition.GeoPositionData
 
 import com.example.skycast.data.repository.Repository
@@ -22,11 +23,15 @@ class GetLocationViewModel(
 
     private val _locationLiveData = MutableLiveData<Resource<GeoPositionData>>()
     private val _getCurrentTempLiveData = MutableLiveData<Resource<CurrentTemp>>()
+    private val _getForecastDetailsLiveData = MutableLiveData<Resource<DailyForcast>>()
 
     val locationLiveData: LiveData<Resource<GeoPositionData>>
         get() = _locationLiveData
     val getCurrentTempLiveData: LiveData<Resource<CurrentTemp>>
         get() = _getCurrentTempLiveData
+
+    val getForecastDetailsLiveData : LiveData<Resource<DailyForcast>>
+        get() = _getForecastDetailsLiveData
 
     fun getLocalLocationDetails(latitude: String, longitude: String) {
         if (NetworkUtils.isNetworkAvailable(context = context)) {
@@ -47,6 +52,18 @@ class GetLocationViewModel(
             }
         } else {
             _getCurrentTempLiveData.value = Resource.Error("No internet connection", null)
+        }
+
+    }
+
+    fun getForcastData(key: String){
+        if (NetworkUtils.isNetworkAvailable(context = context)) {
+            viewModelScope.launch {
+                val result = repository.getForcastData(key)
+                _getForecastDetailsLiveData.value = result
+            }
+        } else {
+            _getForecastDetailsLiveData.value = Resource.Error("No internet connection", null)
         }
 
     }
