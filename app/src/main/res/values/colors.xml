@@ -8,8 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="matte_black">#FF0B131E</color>
+     <color name="matte_black">#FF2F2F31</color>
+     <color name="background_grey">#FF202B3C</color>
+     <color name="text_color">#FF9399A2</color>
+     <color name="value_text_color">#FF9FA6B0</color>
+     <color name="text_blue">#FF0095FF</color>
     <color name="search_bar_hint_text_background">#FFFDFCFC</color>
+
 
 
 
