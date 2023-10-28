@@ -4,15 +4,15 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.skycast.data.apiinterface.ApiService
-import com.example.skycast.data.repository.Repository
+import com.example.skycast.data.repository.HomeRepository
 import com.example.skycast.data.retrofit.RetrofitClient
-import com.example.skycast.ui.viewmodel.GetLocationViewModel
+import com.example.skycast.ui.viewmodel.HomeViewModel
 
-class PostViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
+class HomeViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val apiService = RetrofitClient.getInstance().create(ApiService::class.java)
-        val repository = Repository(apiService)
-        return GetLocationViewModel(repository,context)  as T
+        val homeRepository = HomeRepository(apiService,context)
+        return HomeViewModel(homeRepository,context)  as T
     }
 
 }

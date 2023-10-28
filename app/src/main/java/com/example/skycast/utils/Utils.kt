@@ -1,5 +1,7 @@
 package com.example.skycast.utils
 
+import android.content.Context
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
@@ -33,7 +35,13 @@ class Utils {
         return result.toString()
     }
 
+
     fun fahrenheitToCelsius(fahrenheit: Double): String {
         return String.format("%.1f",(fahrenheit - 32) * 5 / 9)
+    }
+
+    fun showToast(context: Context?, message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+
     }
 }

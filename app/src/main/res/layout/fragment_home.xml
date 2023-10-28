@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".HomeFragment">
+    android:background="@color/matte_black"
+    tools:context=".ui.fragment.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,9 +26,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp"
                 android:layout_marginRight="60dp"
-                android:src="@drawable/ic_cloud_refresh"
+                android:src="@drawable/ic_location"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/locTitle"
@@ -44,8 +44,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/tempImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="240dp"
+                android:layout_height="120dp"
                 android:layout_marginTop="25dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -69,9 +69,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="40dp"
+                android:layout_marginBottom="40dp"
                 android:background="@drawable/rounded_corners"
                 android:orientation="vertical"
                 android:padding="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/forcastTable">
 
@@ -86,14 +88,6 @@
                         android:layout_weight="1"
                         android:text="AIR CONDITIONS"
                         android:textColor="@color/text_color" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="See More"
-                        android:textColor="@color/text_blue" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -119,11 +113,12 @@
                             android:textSize="15sp" />
 
                         <TextView
+                            android:id="@+id/realFeelTemperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
                             android:layout_weight="1"
-                            android:text="30"
+                            android:text="--"
                             android:textColor="@color/value_text_color"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -146,6 +141,7 @@
                             android:textSize="15sp" />
 
                         <TextView
+                            android:id="@+id/windSpeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
@@ -172,18 +168,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:drawableStart="@drawable/ic_droplet"
+                            android:drawableStart="@drawable/ic_pressure"
                             android:drawablePadding="5dp"
-                            android:text="Chance of Rain"
+                            android:text="Pressure"
                             android:textColor="@color/text_color"
                             android:textSize="15sp" />
 
                         <TextView
+                            android:id="@+id/pressureValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
                             android:layout_weight="1"
-                            android:text="0%"
+                            android:text="--"
                             android:textColor="@color/value_text_color"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -206,6 +203,7 @@
                             android:textSize="15sp" />
 
                         <TextView
+                            android:id="@+id/uvIndex"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="30dp"
@@ -216,28 +214,31 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/forcastTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="40dp"
-                android:orientation="vertical"
                 android:background="@drawable/rounded_corners"
+                android:orientation="vertical"
                 android:padding="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tempText">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5-DAY FORCAST"
                     android:textColor="@color/text_color" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/foreCastList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:itemCount="5"
-                    tools:listitem="@layout/forcast_list_item"/>
+                    tools:listitem="@layout/forcast_list_item" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

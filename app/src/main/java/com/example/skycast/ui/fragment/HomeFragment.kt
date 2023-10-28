@@ -1,4 +1,4 @@
-package com.example.skycast
+package com.example.skycast.ui.fragment
 
 import android.Manifest
 import android.content.Context.LOCATION_SERVICE
@@ -10,23 +10,25 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.skycast.R
 import com.example.skycast.databinding.FragmentHomeBinding
 import com.example.skycast.ui.adapter.ForeCastAdapter
-import com.example.skycast.ui.viewmodel.GetLocationViewModel
+import com.example.skycast.ui.viewmodel.HomeViewModel
 import com.example.skycast.utils.NoInternetDialogFragment
 import com.example.skycast.utils.Resource
-import com.example.skycast.viewmodelfactory.PostViewModelFactory
+import com.example.skycast.utils.Utils
+import com.example.skycast.viewmodelfactory.HomeViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.squareup.picasso.Picasso
 
 
 class HomeFragment : Fragment() {
@@ -34,7 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: FragmentHomeBinding
     private lateinit var locationCallback: LocationCallback
-    private lateinit var viewModel: GetLocationViewModel
+    private lateinit var viewModel: HomeViewModel
     private lateinit var latitude: String
     private lateinit var longitude: String
     private var isLocationUpdateReceived = false
@@ -62,8 +64,8 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(
             this,
-            PostViewModelFactory(this.requireActivity().applicationContext)
-        ).get(GetLocationViewModel::class.java)
+            HomeViewModelFactory(this.requireActivity().applicationContext)
+        ).get(HomeViewModel::class.java)
 
         initLocationCallback()
         requestLocationPermissionAndFetchLocation()
@@ -99,7 +101,7 @@ class HomeFragment : Fragment() {
                         }
                     } else {
                         // Handle other errors
-                        showToast(errorMessage)
+                        Utils().showToast(context,errorMessage)
                     }
                 }
 
@@ -118,15 +120,17 @@ class HomeFragment : Fragment() {
                     val currentTempData = resource.data
                     //println("pavan 3"+currentTempData[0].Temperature.Metric.Value.toString())
                     binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()+" \u2103"
+                    binding.realFeelTemperature.text = currentTempData[0].RealFeelTemperature.Metric.Value.toString()+" \u2103"
+                    binding.windSpeed.text= currentTempData[0].Wind.Speed.Metric.Value.toString()+" km/h"
+                    binding.uvIndex.text=currentTempData[0].UVIndex.toString()
+                    binding.pressureValue.text=currentTempData[0].Pressure.Metric.Value.toString()+" mb"
+
+                    Picasso.get()
+                        .load("https://developer.accuweather.com/sites/default/files/${currentTempData[0].WeatherIcon}-s.png")
+                        .placeholder(R.drawable.ic_01) // Optional: Set a placeholder image
+                        .into(binding.tempImage);
 
 
-
-
-                    if(currentTempData[0].WeatherText.contains("rainy",true) ){
-                        binding.tempImage.setImageResource(R.drawable.ic_rainy)
-                    } else {
-                        binding.tempImage.setImageResource(R.drawable.ic_sunny_cloudy)
-                    }
                 }
 
                 is Resource.Error -> {
@@ -230,7 +234,7 @@ class HomeFragment : Fragment() {
         if (isGPSEnabled()) {
             startLocationUpdates()
         } else {
-            showToast("GPS is disabled. Please enable it.")
+            Utils().showToast(context=context, message = "GPS is disabled. Please enable it.")
             openGPSSettings()
         }
     }
@@ -240,10 +244,7 @@ class HomeFragment : Fragment() {
         activity?.startActivityForResult(intent, REQUEST_GPS_SETTINGS)
     }
 
-    private fun showToast(s: String) {
-        Toast.makeText(this.requireContext(), s, Toast.LENGTH_LONG).show()
 
-    }
 
     private fun startLocationUpdates() {
         val locationRequest =
@@ -288,7 +289,7 @@ class HomeFragment : Fragment() {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkAndFetchLocation()
             } else {
-                showToast("Location permission denied.")
+               Utils().showToast(context,"Location permission denied.")
             }
         }
     }

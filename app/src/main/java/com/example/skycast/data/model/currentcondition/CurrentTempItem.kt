@@ -19,5 +19,7 @@ data class CurrentTempItem(
     val Visibility: Visibility,
     val WeatherIcon: Int,
     val WeatherText: String,
-    val Wind: Wind
+    val Wind: Wind,
+    val RealFeelTemperature : RealFeelTemperature,
+    val Pressure:Pressure
 )

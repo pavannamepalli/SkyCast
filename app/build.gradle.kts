@@ -71,5 +71,10 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
+    implementation ("com.squareup.picasso:picasso:2.71828")
+
+    implementation ("com.google.android.material:material:1.1.0-alpha10")
+
+
 
 }
