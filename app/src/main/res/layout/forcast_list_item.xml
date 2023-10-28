@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="10dp"
+    android:paddingVertical="8dp"
     android:layout_weight="4"
     android:background="#FF202B3C">
     <TextView
@@ -11,27 +11,31 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
         android:gravity="center"
+        android:textSize="15sp"
         android:layout_gravity="center"
         android:textColor="@color/text_color"
         android:text="Today"/>
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/code_1" />
+        android:id="@+id/imageView"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_01" />
     <TextView
         android:id="@+id/phraseText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:text="Today"
+        android:textSize="15sp"
         android:gravity="center"
         android:layout_gravity="center"
         android:textColor="@color/text_color"
-        android:layout_weight="1.5"/>
+        android:layout_weight="1"/>
     <TextView
         android:id="@+id/tempText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Today"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/text_color"
         android:gravity="center"

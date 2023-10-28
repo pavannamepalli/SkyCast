@@ -9,14 +9,14 @@ import com.example.skycast.data.model.currentcondition.CurrentTemp
 import com.example.skycast.data.model.dailyforcast.DailyForcast
 import com.example.skycast.data.model.geoposition.GeoPositionData
 
-import com.example.skycast.data.repository.Repository
+import com.example.skycast.data.repository.HomeRepository
 import com.example.skycast.utils.NetworkUtils
 import com.example.skycast.utils.Resource
 import kotlinx.coroutines.launch
 
 
-class GetLocationViewModel(
-    private val repository: Repository,
+class HomeViewModel(
+    private val homeRepository: HomeRepository,
     private val context: Context
 
 ) : ViewModel() {
@@ -36,7 +36,7 @@ class GetLocationViewModel(
     fun getLocalLocationDetails(latitude: String, longitude: String) {
         if (NetworkUtils.isNetworkAvailable(context = context)) {
             viewModelScope.launch {
-                val result = repository.getLocalLocationDetails(latitude,longitude)
+                val result = homeRepository.getLocalLocationDetails(latitude,longitude)
                 _locationLiveData.value = result
             }
         } else {
@@ -47,7 +47,7 @@ class GetLocationViewModel(
     fun getCurrentWeather(key: String) {
         if (NetworkUtils.isNetworkAvailable(context = context)) {
             viewModelScope.launch {
-                val result = repository.getCurrentTempCondition(key)
+                val result = homeRepository.getCurrentTempCondition(key)
                 _getCurrentTempLiveData.value = result
             }
         } else {
@@ -59,7 +59,7 @@ class GetLocationViewModel(
     fun getForcastData(key: String){
         if (NetworkUtils.isNetworkAvailable(context = context)) {
             viewModelScope.launch {
-                val result = repository.getForcastData(key)
+                val result = homeRepository.getForcastData(key)
                 _getForecastDetailsLiveData.value = result
             }
         } else {

@@ -2,7 +2,7 @@ package com.example.skycast.utils
 
 object Constants {
 
-    var ApiKey = "E3czvgHS0E3qSfLR0SJZBnu72HBBw29D"  // Main Key
+    var ApiKey = "E3czvgHS0E3qSfLR0SJZBnu72HBBw29D"
 
 
 
