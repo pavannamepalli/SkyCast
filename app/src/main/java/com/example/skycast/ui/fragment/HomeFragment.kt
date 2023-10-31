@@ -53,6 +53,10 @@ class HomeFragment : Fragment() {
         binding.progressIndicator.visibility = View.VISIBLE
         binding.foreCastList.layoutManager=LinearLayoutManager(this.context)
 
+        val receivedData = arguments?.getString("key")
+
+
+
         binding.refreshTemp.setOnClickListener {
             //println("pavan 1 ")
             requestLocationPermissionAndFetchLocation()
@@ -60,12 +64,19 @@ class HomeFragment : Fragment() {
             viewModel.getLocalLocationDetails(latitude, longitude)
         }
 
+
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
         viewModel = ViewModelProvider(
             this,
             HomeViewModelFactory(this.requireActivity().applicationContext)
         ).get(HomeViewModel::class.java)
+
+        if(receivedData != null){
+            viewModel.getCurrentWeather(receivedData)
+            viewModel.getForcastData(receivedData)
+        }
 
         initLocationCallback()
         requestLocationPermissionAndFetchLocation()

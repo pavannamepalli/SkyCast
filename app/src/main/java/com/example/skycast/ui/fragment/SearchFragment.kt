@@ -9,15 +9,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.skycast.MainActivity
+import com.example.skycast.R
 import com.example.skycast.databinding.FragmentSearchBinding
 import com.example.skycast.ui.adapter.LocalistListAdapter
+import com.example.skycast.ui.adapter.OnItemClickListener
 import com.example.skycast.ui.viewmodel.SearchViewModel
 import com.example.skycast.utils.NoInternetDialogFragment
 import com.example.skycast.utils.Resource
 import com.example.skycast.utils.Utils
 import com.example.skycast.viewmodelfactory.SearchViewModelFactory
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(),OnItemClickListener {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var viewModel: SearchViewModel
@@ -53,7 +56,7 @@ class SearchFragment : Fragment() {
             when(resource){
                 is Resource.Success -> {
                     val locationListData = resource.data
-                    val adapter = LocalistListAdapter(locationListData)
+                    val adapter = LocalistListAdapter(locationListData,this)
                     binding.searchList.adapter=adapter
                 }
 
@@ -82,6 +85,20 @@ class SearchFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onItemClicked(key: String) {
+        val fragmenthome = HomeFragment()
+     //  print("key"+key)
+        val args = Bundle()
+        args.putString("key", key) // Replace "key" with the actual key and add data to be passed
+        fragmenthome.arguments = args
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentView, fragmenthome)  // R.id.fragment_container is the container in the layout where the fragment will be placed
+            .addToBackStack(null)  // Adding the transaction to the back stack
+            .commit()
+
+        (activity as MainActivity).updateSelectedItem(R.id.navigation_home)
     }
 
 
