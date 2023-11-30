@@ -22,7 +22,7 @@ class LocalistListAdapter(private val items: LocationList,private val listener: 
        val item = items[position]
         holder.localName.text=item.LocalizedName
         holder.countryName.text=  item.AdministrativeArea.LocalizedName+ " , " +item.Country.LocalizedName
-        holder.itemView.setOnClickListener { listener.onItemClicked(item.Key) }
+        holder.itemView.setOnClickListener { listener.onItemClicked(item.Key,item.LocalizedName) }
     }
 
 

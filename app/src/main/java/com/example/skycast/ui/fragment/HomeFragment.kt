@@ -48,17 +48,17 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+        
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.progressIndicator.visibility = View.VISIBLE
         binding.foreCastList.layoutManager=LinearLayoutManager(this.context)
 
         val receivedData = arguments?.getString("key")
-
+        val localizedName = arguments?.getString("localizedName")
 
 
         binding.refreshTemp.setOnClickListener {
-            //println("pavan 1 ")
+            
             requestLocationPermissionAndFetchLocation()
             fetchLocationDetails()
             viewModel.getLocalLocationDetails(latitude, longitude)
@@ -73,9 +73,11 @@ class HomeFragment : Fragment() {
             HomeViewModelFactory(this.requireActivity().applicationContext)
         ).get(HomeViewModel::class.java)
 
-        if(receivedData != null){
+        if(receivedData != null && localizedName != null ){
+            binding.locTitle.text= localizedName
             viewModel.getCurrentWeather(receivedData)
             viewModel.getForcastData(receivedData)
+
         }
 
         initLocationCallback()
@@ -90,19 +92,19 @@ class HomeFragment : Fragment() {
         viewModel.locationLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    // Handle success and update UI
+                    
                     val locationData = resource.data
-                    //println("pavan 2"+locationData.SupplementalAdminAreas[1].EnglishName)
-                    binding.locTitle.text=locationData.SupplementalAdminAreas[1].EnglishName
+                    
+                    binding.locTitle.text=locationData.LocalizedName
                     viewModel.getCurrentWeather(locationData.Key)
                     viewModel.getForcastData(locationData.Key)
                 }
 
                 is Resource.Error -> {
-                    // Handle error
+                    
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
+                        
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -111,13 +113,13 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-                        // Handle other errors
+                        
                         Utils().showToast(context,errorMessage)
                     }
                 }
 
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
+                    
                 }
 
 
@@ -127,9 +129,9 @@ class HomeFragment : Fragment() {
         viewModel.getCurrentTempLiveData.observe(viewLifecycleOwner){ resource ->
             when (resource) {
                 is Resource.Success -> {
-                    // Handle success and update UI
+                    
                     val currentTempData = resource.data
-                    //println("pavan 3"+currentTempData[0].Temperature.Metric.Value.toString())
+                    
                     binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()+" \u2103"
                     binding.realFeelTemperature.text = currentTempData[0].RealFeelTemperature.Metric.Value.toString()+" \u2103"
                     binding.windSpeed.text= currentTempData[0].Wind.Speed.Metric.Value.toString()+" km/h"
@@ -138,17 +140,17 @@ class HomeFragment : Fragment() {
 
                     Picasso.get()
                         .load("https://developer.accuweather.com/sites/default/files/${currentTempData[0].WeatherIcon}-s.png")
-                        .placeholder(R.drawable.ic_01) // Optional: Set a placeholder image
+                        .placeholder(R.drawable.ic_01) 
                         .into(binding.tempImage);
 
 
                 }
 
                 is Resource.Error -> {
-                    // Handle error
+                    
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
+                        
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -157,12 +159,12 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-                        // Handle other errors
+                        
                     }
                 }
 
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
+                    
                 }
 
 
@@ -173,20 +175,20 @@ class HomeFragment : Fragment() {
         viewModel.getForecastDetailsLiveData.observe(viewLifecycleOwner){ resource ->
             when (resource) {
                 is Resource.Success -> {
-                    // Handle success and update UI
+                    
                     val forecastData = resource.data
-                    //println("pavan 3"+currentTempData[0].Temperature.Metric.Value.toString())
-                    //binding.tempText.text= forecastData.Headline.EffectiveEpochDate.toString()
+                    
+                    
                     val adapter = ForeCastAdapter(forecastData.DailyForecasts)
                     binding.foreCastList.adapter= adapter
 
                 }
 
                 is Resource.Error -> {
-                    // Handle error
+                    
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
+                        
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -195,12 +197,12 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-                        // Handle other errors
+                        
                     }
                 }
 
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
+                    
                 }
 
 

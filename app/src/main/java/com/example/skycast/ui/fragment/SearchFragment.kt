@@ -87,11 +87,12 @@ class SearchFragment : Fragment(),OnItemClickListener {
         return binding.root
     }
 
-    override fun onItemClicked(key: String) {
+    override fun onItemClicked(key: String, localizedName: String) {
         val fragmenthome = HomeFragment()
      //  print("key"+key)
         val args = Bundle()
         args.putString("key", key) // Replace "key" with the actual key and add data to be passed
+        args.putString("localizedName", localizedName) // Replace "key" with the actual key and add data to be passed
         fragmenthome.arguments = args
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragmentView, fragmenthome)  // R.id.fragment_container is the container in the layout where the fragment will be placed
