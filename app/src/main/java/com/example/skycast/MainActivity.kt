@@ -34,17 +34,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     // Load home fragment or perform corresponding action
                     openFragment(HomeFragment())
-                    true
+                    return@setOnNavigationItemSelectedListener true
                 }
 
                 R.id.navigation_search -> {
                     openFragment(SearchFragment())// Load dashboard fragment or perform corresponding action
-                    true
+                    return@setOnNavigationItemSelectedListener true
                 }
 
                 R.id.navigation_settings -> {
                     openFragment(SettingsFragment())//
-                    true
+                    return@setOnNavigationItemSelectedListener true
                 }
 
                 else -> false
@@ -61,6 +61,12 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentView, fragment)
             .commit()
+
+    }
+
+    fun updateSelectedItem(navigationHome: Int) {
+
+        binding.bottomNavigation.selectedItemId=navigationHome
 
     }
 

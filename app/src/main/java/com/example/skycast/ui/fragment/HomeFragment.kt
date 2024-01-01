@@ -29,8 +29,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.squareup.picasso.Picasso
-
-
 class HomeFragment : Fragment() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -43,29 +41,35 @@ class HomeFragment : Fragment() {
 
     private val REQUEST_LOCATION_PERMISSION = 123
     private val REQUEST_GPS_SETTINGS = 456
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.progressIndicator.visibility = View.VISIBLE
-        binding.foreCastList.layoutManager=LinearLayoutManager(this.context)
+        binding.foreCastList.layoutManager = LinearLayoutManager(this.context)
 
+        val receivedData = arguments?.getString("key")
+        val localizedName = arguments?.getString("localizedName")
         binding.refreshTemp.setOnClickListener {
-            //println("pavan 1 ")
+
             requestLocationPermissionAndFetchLocation()
             fetchLocationDetails()
             viewModel.getLocalLocationDetails(latitude, longitude)
         }
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
         viewModel = ViewModelProvider(
             this,
             HomeViewModelFactory(this.requireActivity().applicationContext)
         ).get(HomeViewModel::class.java)
+
+        if (receivedData != null && localizedName != null) {
+            binding.locTitle.text = localizedName
+            viewModel.getCurrentWeather(receivedData)
+            viewModel.getForcastData(receivedData)
+
+        }
 
         initLocationCallback()
         requestLocationPermissionAndFetchLocation()
@@ -79,19 +83,19 @@ class HomeFragment : Fragment() {
         viewModel.locationLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    // Handle success and update UI
+
                     val locationData = resource.data
-                    //println("pavan 2"+locationData.SupplementalAdminAreas[1].EnglishName)
-                    binding.locTitle.text=locationData.SupplementalAdminAreas[1].EnglishName
+
+                    binding.locTitle.text = locationData.LocalizedName
                     viewModel.getCurrentWeather(locationData.Key)
                     viewModel.getForcastData(locationData.Key)
                 }
 
                 is Resource.Error -> {
-                    // Handle error
+
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
+
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -100,44 +104,44 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-                        // Handle other errors
-                        Utils().showToast(context,errorMessage)
+
+                        Utils().showToast(context, errorMessage)
                     }
                 }
 
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
+
                 }
-
-
             }
         }
 
-        viewModel.getCurrentTempLiveData.observe(viewLifecycleOwner){ resource ->
+        viewModel.getCurrentTempLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    // Handle success and update UI
+
                     val currentTempData = resource.data
-                    //println("pavan 3"+currentTempData[0].Temperature.Metric.Value.toString())
-                    binding.tempText.text= currentTempData[0].Temperature.Metric.Value.toString()+" \u2103"
-                    binding.realFeelTemperature.text = currentTempData[0].RealFeelTemperature.Metric.Value.toString()+" \u2103"
-                    binding.windSpeed.text= currentTempData[0].Wind.Speed.Metric.Value.toString()+" km/h"
-                    binding.uvIndex.text=currentTempData[0].UVIndex.toString()
-                    binding.pressureValue.text=currentTempData[0].Pressure.Metric.Value.toString()+" mb"
+
+                    binding.tempText.text =
+                        currentTempData[0].Temperature.Metric.Value.toString() + " \u2103"
+                    binding.realFeelTemperature.text =
+                        currentTempData[0].RealFeelTemperature.Metric.Value.toString() + " \u2103"
+                    binding.windSpeed.text =
+                        currentTempData[0].Wind.Speed.Metric.Value.toString() + " km/h"
+                    binding.uvIndex.text = currentTempData[0].UVIndex.toString()
+                    binding.pressureValue.text =
+                        currentTempData[0].Pressure.Metric.Value.toString() + " mb"
 
                     Picasso.get()
                         .load("https://developer.accuweather.com/sites/default/files/${currentTempData[0].WeatherIcon}-s.png")
-                        .placeholder(R.drawable.ic_01) // Optional: Set a placeholder image
-                        .into(binding.tempImage);
-
-
+                        .placeholder(R.drawable.ic_01)
+                        .into(binding.tempImage)
                 }
 
                 is Resource.Error -> {
-                    // Handle error
+
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
+
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -146,36 +150,32 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-                        // Handle other errors
+
                     }
                 }
 
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
+
                 }
-
-
             }
 
         }
 
-        viewModel.getForecastDetailsLiveData.observe(viewLifecycleOwner){ resource ->
+        viewModel.getForecastDetailsLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    // Handle success and update UI
+
                     val forecastData = resource.data
-                    //println("pavan 3"+currentTempData[0].Temperature.Metric.Value.toString())
-                    //binding.tempText.text= forecastData.Headline.EffectiveEpochDate.toString()
                     val adapter = ForeCastAdapter(forecastData.DailyForecasts)
-                    binding.foreCastList.adapter= adapter
+                    binding.foreCastList.adapter = adapter
 
                 }
 
                 is Resource.Error -> {
-                    // Handle error
+
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
+
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -184,15 +184,13 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-                        // Handle other errors
+
                     }
                 }
 
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
+
                 }
-
-
             }
         }
     }
@@ -204,14 +202,14 @@ class HomeFragment : Fragment() {
                     val location = locationResult.lastLocation
                     if (location != null) {
                         binding.progressIndicator.visibility = View.GONE
-                        latitude= location.latitude.toString()
-                         longitude = location.longitude.toString()
+                        latitude = location.latitude.toString()
+                        longitude = location.longitude.toString()
                         viewModel.getLocalLocationDetails(latitude, longitude)
                         isLocationUpdateReceived = true
                     }
                 }
             }
-        };
+        }
     }
 
     private fun requestLocationPermissionAndFetchLocation() {
@@ -234,7 +232,7 @@ class HomeFragment : Fragment() {
         if (isGPSEnabled()) {
             startLocationUpdates()
         } else {
-            Utils().showToast(context=context, message = "GPS is disabled. Please enable it.")
+            Utils().showToast(context = context, message = "GPS is disabled. Please enable it.")
             openGPSSettings()
         }
     }
@@ -243,9 +241,6 @@ class HomeFragment : Fragment() {
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         activity?.startActivityForResult(intent, REQUEST_GPS_SETTINGS)
     }
-
-
-
     private fun startLocationUpdates() {
         val locationRequest =
             LocationRequest.create().setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -268,18 +263,11 @@ class HomeFragment : Fragment() {
         requestLocationPermissionAndFetchLocation()
         fetchLocationDetails()
     }
-
-
-
     private fun isGPSEnabled(): Boolean {
         val locationManager =
             requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager?
         return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-
-
     }
-
-
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -289,18 +277,14 @@ class HomeFragment : Fragment() {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkAndFetchLocation()
             } else {
-               Utils().showToast(context,"Location permission denied.")
+                Utils().showToast(context, "Location permission denied.")
             }
         }
     }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_GPS_SETTINGS) {
             checkAndFetchLocation()
         }
     }
-
-
 }
