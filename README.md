@@ -1,39 +1,93 @@
 # Skycast Android App
 
-Skycast is an Android weather app that provides current weather conditions and forecasts. It uses the MVVM architecture and integrates with the AccuWeather API for weather data.
+Skycast is a feature-rich Android weather application that provides real-time weather conditions and forecasts for users based on their current location or a specified city. The app is designed using the MVVM (Model-View-ViewModel) architecture to ensure scalability and maintainability. It leverages the AccuWeather API for reliable and accurate weather data.
+
+---
 
 ## Features
 
-- Display current weather conditions based on location or user-specified city.
-- Show daily forecast details for the selected location.
-- Integration with AccuWeather API for accurate weather information.
-- Location services to fetch current coordinates for weather data.
+### ✔ Real-time Weather Updates
+- Fetch and display current weather conditions, including temperature, humidity, wind speed, and precipitation levels.
+- Provides an intuitive user interface with visually appealing weather representations.
 
+### ✔ Daily & Weekly Forecasts
+- Offers detailed weather forecasts for the next few days, including minimum and maximum temperatures, weather conditions, and precipitation chances.
+- Graphical representation of weather trends to enhance readability.
 
+### ✔ Location-based Weather Data
+- Uses GPS and network location services to determine the user’s current location and fetch corresponding weather information.
+- Option to manually search for weather data of any city worldwide.
+
+### ✔ AccuWeather API Integration
+- Seamless integration with the AccuWeather API to provide accurate and up-to-date weather data.
+- Ensures data reliability with fast and efficient API calls.
+
+### ✔ User-friendly UI/UX
+- Clean and modern UI following Material Design principles.
+- Dark mode support for improved user experience in low-light conditions.
+
+### ✔ MVVM Architecture
+- Maintains a clean architecture using the MVVM design pattern for better code management.
+- Separation of concerns makes the codebase easy to maintain and extend.
+
+---
 
 ## Getting Started
 
-These instructions will help you set up the project locally on your machine.
+Follow these instructions to set up and run the Skycast project on your local machine.
 
 ### Prerequisites
+Ensure you have the following tools installed:
+- **Android Studio** (latest stable version)
+- **JDK 11+**
+- **An active AccuWeather API key**
 
-- Android Studio
-- AccuWeather API key (replace `YOUR_ACCUWEATHER_API_KEY` in the code)
+### Setup Instructions
+1. **Clone the Repository**
+   ```sh
+   git clone https://github.com/your-repo/skycast.git
+   cd skycast
+   ```
+2. **Open the Project in Android Studio**
+   - Launch Android Studio and open the cloned project.
+   - Allow Gradle to sync dependencies.
 
-##  Contributing
+3. **Obtain an AccuWeather API Key**
+   - Visit [AccuWeather API](https://developer.accuweather.com/) and sign up for an API key.
+   - Replace `YOUR_ACCUWEATHER_API_KEY` in the code with your actual API key.
 
-  If you'd like to contribute to this project, please follow these steps:
+4. **Run the App**
+   - Connect a physical device or use an emulator.
+   - Click the **Run** button in Android Studio to build and launch the app.
 
-- Fork the repository.
-- Create a new branch for your feature or bug fix.
-- Make your changes and submit a pull request.
+---
+
+## Project Structure
+Skycast follows the MVVM architecture pattern for better separation of concerns. Below is the directory structure:
+```
+app/
+├── src/
+│   ├── main/
+│   │   ├── java/com/skycast/
+│   │   │   ├── data/            # Repository and API calls
+│   │   │   ├── model/           # Data models
+│   │   │   ├── ui/              # UI components (Activities/Fragments)
+│   │   │   ├── viewmodel/       # ViewModels for UI interaction
+│   │   │   ├── utils/           # Utility classes
+│   │   ├── res/                 # Layout and drawable resources
+```
+---
 
 ## License
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+---
 
 ## Acknowledgments
-Thanks to AccuWeather for providing the weather API.
+Special thanks to [AccuWeather](https://developer.accuweather.com/) for providing the weather API service.
 
-# Author
-Pavan Namepalli
+---
+
+## Author
+[Pavan Namepalli](https://github.com/pavan-namepalli)
 
