@@ -89,5 +89,5 @@ Special thanks to [AccuWeather](https://developer.accuweather.com/) for providin
 ---
 
 ## Author
-[Pavan Namepalli](https://github.com/pavan-namepalli)
+[Pavan Namepalli](https://www.linkedin.com/in/pavan-namepalli/)
 
