@@ -19,6 +19,7 @@ import com.example.skycast.R
 import com.example.skycast.databinding.FragmentHomeBinding
 import com.example.skycast.ui.adapter.ForeCastAdapter
 import com.example.skycast.ui.viewmodel.HomeViewModel
+import com.example.skycast.utils.Constants
 import com.example.skycast.utils.NoInternetDialogFragment
 import com.example.skycast.utils.Resource
 import com.example.skycast.utils.Utils
@@ -83,19 +84,14 @@ class HomeFragment : Fragment() {
         viewModel.locationLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-
                     val locationData = resource.data
-
                     binding.locTitle.text = locationData.LocalizedName
                     viewModel.getCurrentWeather(locationData.Key)
                     viewModel.getForcastData(locationData.Key)
                 }
-
                 is Resource.Error -> {
-
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -104,13 +100,10 @@ class HomeFragment : Fragment() {
                             )
                         }
                     } else {
-
                         Utils().showToast(context, errorMessage)
                     }
                 }
-
                 is Resource.Loading -> {
-
                 }
             }
         }
@@ -118,30 +111,21 @@ class HomeFragment : Fragment() {
         viewModel.getCurrentTempLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-
                     val currentTempData = resource.data
-
-                    binding.tempText.text =
-                        currentTempData[0].Temperature.Metric.Value.toString() + " \u2103"
-                    binding.realFeelTemperature.text =
-                        currentTempData[0].RealFeelTemperature.Metric.Value.toString() + " \u2103"
-                    binding.windSpeed.text =
-                        currentTempData[0].Wind.Speed.Metric.Value.toString() + " km/h"
+                    binding.tempText.text = "${currentTempData[0].Temperature.Metric.Value}°C"
+                    binding.realFeelTemperature.text = "${currentTempData[0].RealFeelTemperature.Metric.Value}°C"
+                    binding.windSpeed.text = "${currentTempData[0].Wind.Speed.Metric.Value} km/h"
                     binding.uvIndex.text = currentTempData[0].UVIndex.toString()
-                    binding.pressureValue.text =
-                        currentTempData[0].Pressure.Metric.Value.toString() + " mb"
+                    binding.pressureValue.text = "${currentTempData[0].Pressure.Metric.Value} mb"
 
                     Picasso.get()
-                        .load("https://developer.accuweather.com/sites/default/files/${currentTempData[0].WeatherIcon}-s.png")
+                        .load("${Constants.IMAGE_BASE_URL}${currentTempData[0].WeatherIcon}-s.png")
                         .placeholder(R.drawable.ic_01)
                         .into(binding.tempImage)
                 }
-
                 is Resource.Error -> {
-
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -149,33 +133,23 @@ class HomeFragment : Fragment() {
                                 "NoInternetDialog"
                             )
                         }
-                    } else {
-
                     }
                 }
-
                 is Resource.Loading -> {
-
                 }
             }
-
         }
 
         viewModel.getForecastDetailsLiveData.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-
                     val forecastData = resource.data
                     val adapter = ForeCastAdapter(forecastData.DailyForecasts)
                     binding.foreCastList.adapter = adapter
-
                 }
-
                 is Resource.Error -> {
-
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -183,13 +157,9 @@ class HomeFragment : Fragment() {
                                 "NoInternetDialog"
                             )
                         }
-                    } else {
-
                     }
                 }
-
                 is Resource.Loading -> {
-
                 }
             }
         }

@@ -32,29 +32,20 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    // Load home fragment or perform corresponding action
                     openFragment(HomeFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-
                 R.id.navigation_search -> {
-                    openFragment(SearchFragment())// Load dashboard fragment or perform corresponding action
+                    openFragment(SearchFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-
                 R.id.navigation_settings -> {
-                    openFragment(SettingsFragment())//
+                    openFragment(SettingsFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
-
                 else -> false
-
             }
         }
-
-
-
-
     }
 
     private fun openFragment(fragment: Fragment) {
@@ -65,10 +56,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateSelectedItem(navigationHome: Int) {
-
-        binding.bottomNavigation.selectedItemId=navigationHome
-
+        binding.bottomNavigation.selectedItemId = navigationHome
     }
-
-
 }

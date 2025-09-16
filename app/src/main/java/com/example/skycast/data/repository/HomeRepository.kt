@@ -16,7 +16,7 @@ class HomeRepository(private val apiService: ApiService, private val  context: C
 
     suspend fun getLocalLocationDetails(latitude: String, longitude: String): Resource<GeoPositionData> {
         return try {
-            val response = apiService.getLocalLocationDetails(apiKey = Constants.ApiKey, query = "$latitude,$longitude", language = "en-us", details = false, topLevel = true)
+            val response = apiService.getLocalLocationDetails(apiKey = Constants.API_KEY, query = "$latitude,$longitude", language = Constants.LANGUAGE, details = false, topLevel = true)
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {
@@ -41,7 +41,7 @@ class HomeRepository(private val apiService: ApiService, private val  context: C
 
     suspend fun getCurrentTempCondition(key: String): Resource<CurrentTemp> {
         return try {
-            val response = apiService.getCurrentTempCondition(apiKey = Constants.ApiKey, locationKey = key, language = "en-us", details = true)
+            val response = apiService.getCurrentTempCondition(apiKey = Constants.API_KEY, locationKey = key, language = Constants.LANGUAGE, details = true)
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {
@@ -63,7 +63,7 @@ class HomeRepository(private val apiService: ApiService, private val  context: C
 
    suspend fun getForcastData(key: String): Resource<DailyForcast> {
         return try {
-            val response = apiService.getForcastData(apiKey = Constants.ApiKey, locationKey = key, language = "en-us", details = true,metric = false)
+            val response = apiService.getForcastData(apiKey = Constants.API_KEY, locationKey = key, language = Constants.LANGUAGE, details = true, metric = false)
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {

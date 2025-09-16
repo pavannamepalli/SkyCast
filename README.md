@@ -1,93 +1,168 @@
-# Skycast Android App
+# SkyCast Weather App
 
-Skycast is a feature-rich Android weather application that provides real-time weather conditions and forecasts for users based on their current location or a specified city. The app is designed using the MVVM (Model-View-ViewModel) architecture to ensure scalability and maintainability. It leverages the AccuWeather API for reliable and accurate weather data.
-
----
+A modern Android weather application built with Kotlin that provides real-time weather conditions and forecasts using the AccuWeather API.
 
 ## Features
 
-### ✔ Real-time Weather Updates
-- Fetch and display current weather conditions, including temperature, humidity, wind speed, and precipitation levels.
-- Provides an intuitive user interface with visually appealing weather representations.
+- **Real-time Weather Data**: Current temperature, humidity, wind speed, and atmospheric pressure
+- **5-Day Forecast**: Detailed weather predictions with temperature ranges and conditions
+- **Location Services**: GPS-based weather data for current location
+- **City Search**: Search and get weather for any city worldwide
+- **Offline Support**: Cached data for offline viewing
+- **Material Design**: Clean, modern UI following Google's design guidelines
 
-### ✔ Daily & Weekly Forecasts
-- Offers detailed weather forecasts for the next few days, including minimum and maximum temperatures, weather conditions, and precipitation chances.
-- Graphical representation of weather trends to enhance readability.
+## Technical Stack
 
-### ✔ Location-based Weather Data
-- Uses GPS and network location services to determine the user’s current location and fetch corresponding weather information.
-- Option to manually search for weather data of any city worldwide.
+- **Language**: Kotlin
+- **Architecture**: MVVM (Model-View-ViewModel)
+- **UI**: Material Design with ViewBinding
+- **Networking**: Retrofit2 with Gson
+- **Image Loading**: Picasso
+- **Location**: Google Play Services Location
+- **Async Operations**: Kotlin Coroutines
+- **Data Persistence**: SharedPreferences
 
-### ✔ AccuWeather API Integration
-- Seamless integration with the AccuWeather API to provide accurate and up-to-date weather data.
-- Ensures data reliability with fast and efficient API calls.
+## Project Structure
 
-### ✔ User-friendly UI/UX
-- Clean and modern UI following Material Design principles.
-- Dark mode support for improved user experience in low-light conditions.
+```
+app/
+├── src/main/java/com/example/skycast/
+│   ├── data/
+│   │   ├── apiinterface/
+│   │   │   └── ApiService.kt
+│   │   ├── model/
+│   │   │   ├── currentcondition/
+│   │   │   ├── dailyforcast/
+│   │   │   ├── geoposition/
+│   │   │   └── searchcities/
+│   │   ├── repository/
+│   │   │   ├── HomeRepository.kt
+│   │   │   └── SearchRepository.kt
+│   │   └── retrofit/
+│   │       └── RetrofitClient.kt
+│   ├── ui/
+│   │   ├── adapter/
+│   │   │   ├── ForeCastAdapter.kt
+│   │   │   ├── LocalistListAdapter.kt
+│   │   │   └── onItemClickListener.kt
+│   │   ├── fragment/
+│   │   │   ├── HomeFragment.kt
+│   │   │   ├── SearchFragment.kt
+│   │   │   └── SettingsFragment.kt
+│   │   └── viewmodel/
+│   │       ├── HomeViewModel.kt
+│   │       └── SearchViewModel.kt
+│   ├── utils/
+│   │   ├── Constants.kt
+│   │   ├── NetworkUtils.kt
+│   │   ├── NoInternetDialogFragment.kt
+│   │   ├── Resource.kt
+│   │   └── Utils.kt
+│   ├── viewmodelfactory/
+│   │   ├── HomeViewModelFactory.kt
+│   │   └── SearchViewModelFactory.kt
+│   └── MainActivity.kt
+└── src/main/res/
+    ├── drawable/
+    ├── layout/
+    ├── values/
+    └── menu/
+```
 
-### ✔ MVVM Architecture
-- Maintains a clean architecture using the MVVM design pattern for better code management.
-- Separation of concerns makes the codebase easy to maintain and extend.
-
----
-
-## Getting Started
-
-Follow these instructions to set up and run the Skycast project on your local machine.
+## Setup Instructions
 
 ### Prerequisites
-Ensure you have the following tools installed:
-- **Android Studio** (latest stable version)
-- **JDK 11+**
-- **An active AccuWeather API key**
+- Android Studio (latest stable version)
+- JDK 11+
+- AccuWeather API key
 
-### Setup Instructions
-1. **Clone the Repository**
-   ```sh
+### Installation
+
+1. **Clone the repository**
+   ```bash
    git clone https://github.com/your-repo/skycast.git
    cd skycast
    ```
-2. **Open the Project in Android Studio**
-   - Launch Android Studio and open the cloned project.
-   - Allow Gradle to sync dependencies.
 
-3. **Obtain an AccuWeather API Key**
-   - Visit [AccuWeather API](https://developer.accuweather.com/) and sign up for an API key.
-   - Replace `YOUR_ACCUWEATHER_API_KEY` in the code with your actual API key.
+2. **Open in Android Studio**
+   - Launch Android Studio
+   - Open the cloned project
+   - Wait for Gradle sync to complete
 
-4. **Run the App**
-   - Connect a physical device or use an emulator.
-   - Click the **Run** button in Android Studio to build and launch the app.
+3. **Configure API Key**
+   - Get your AccuWeather API key from [AccuWeather Developer Portal](https://developer.accuweather.com/)
+   - Update the API key in `app/build.gradle.kts`:
+   ```kotlin
+   buildConfigField("String", "ACCUWEATHER_API_KEY", "\"YOUR_API_KEY_HERE\"")
+   ```
 
----
+4. **Run the application**
+   - Connect an Android device or start an emulator
+   - Click the Run button in Android Studio
 
-## Project Structure
-Skycast follows the MVVM architecture pattern for better separation of concerns. Below is the directory structure:
-```
-app/
-├── src/
-│   ├── main/
-│   │   ├── java/com/skycast/
-│   │   │   ├── data/            # Repository and API calls
-│   │   │   ├── model/           # Data models
-│   │   │   ├── ui/              # UI components (Activities/Fragments)
-│   │   │   ├── viewmodel/       # ViewModels for UI interaction
-│   │   │   ├── utils/           # Utility classes
-│   │   ├── res/                 # Layout and drawable resources
-```
----
+## API Configuration
+
+The app uses the AccuWeather API with the following endpoints:
+- **Geoposition Search**: Get location details from coordinates
+- **Current Conditions**: Real-time weather data
+- **5-Day Forecast**: Weather predictions
+- **City Autocomplete**: Search functionality
+
+## Architecture Details
+
+### MVVM Pattern
+- **Model**: Data classes representing weather information
+- **View**: Fragments with ViewBinding for UI
+- **ViewModel**: Business logic and data management
+
+### Repository Pattern
+- Abstracts data sources (API and local storage)
+- Handles caching and offline functionality
+- Provides single source of truth for data
+
+### Resource Wrapper
+- Sealed class for handling API states (Success, Error, Loading)
+- Consistent error handling across the app
+
+## Key Components
+
+### HomeFragment
+- Displays current weather conditions
+- Shows 5-day forecast
+- Handles location permissions and GPS services
+- Real-time weather updates
+
+### SearchFragment
+- City search with autocomplete
+- Location selection and navigation
+- Real-time search results
+
+### Data Models
+- **CurrentTemp**: Current weather conditions
+- **DailyForcast**: 5-day weather predictions
+- **GeoPositionData**: Location information
+- **LocationList**: Search results
+
+## Permissions
+
+The app requires the following permissions:
+- `ACCESS_FINE_LOCATION`: For GPS-based weather
+- `ACCESS_COARSE_LOCATION`: For approximate location
+- `INTERNET`: For API calls
+- `ACCESS_NETWORK_STATE`: For network status checking
+
+## Build Configuration
+
+- **Target SDK**: 33 (Android 13)
+- **Min SDK**: 24 (Android 7.0)
+- **Kotlin**: 1.8.0
+- **Gradle**: 8.1.0
+
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
----
-
-## Acknowledgments
-Special thanks to [AccuWeather](https://developer.accuweather.com/) for providing the weather API service.
-
----
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Author
-[Pavan Namepalli](https://www.linkedin.com/in/pavan-namepalli/)
 
+[Pavan Namepalli](https://www.linkedin.com/in/pavan-namepalli/)

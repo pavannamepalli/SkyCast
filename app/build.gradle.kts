@@ -14,6 +14,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "ACCUWEATHER_API_KEY", "\"AGgJ25oMOylToNeWAhPshq56kix9guia\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,6 +31,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

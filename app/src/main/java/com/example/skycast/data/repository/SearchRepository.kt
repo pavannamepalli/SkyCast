@@ -13,7 +13,7 @@ class SearchRepository(private val apiService: ApiService, private val  context:
     val editor = sharedPreferences.edit()
     suspend  fun getLocationList(s: CharSequence?): Resource<LocationList> {
         return try {
-            val response = apiService.getLocationList(apiKey = Constants.ApiKey, query = s.toString(), language = "en-us")
+            val response = apiService.getLocationList(apiKey = Constants.API_KEY, query = s.toString(), language = Constants.LANGUAGE)
             if (response.isSuccessful) {
                 val data = response.body()
                 if (data != null) {

@@ -29,7 +29,6 @@ class SearchFragment : Fragment(),OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         binding.searchList.layoutManager=LinearLayoutManager(this.context)
 
@@ -63,7 +62,6 @@ class SearchFragment : Fragment(),OnItemClickListener {
                 is Resource.Error -> {
                     val errorMessage = resource.message
                     if (errorMessage == "No internet connection") {
-                        // Show the NoInternetDialogFragment
                         val dialogFragment = NoInternetDialogFragment.newInstance()
                         activity?.let {
                             dialogFragment.show(
@@ -72,13 +70,10 @@ class SearchFragment : Fragment(),OnItemClickListener {
                             )
                         }
                     } else {
-                        // Handle other errors
-                       Utils().showToast(context,errorMessage)
+                        Utils().showToast(context, errorMessage)
                     }
                 }
-
                 is Resource.Loading -> {
-                    // Handle loading state, e.g., show a progress bar
                 }
             }
 
@@ -89,18 +84,15 @@ class SearchFragment : Fragment(),OnItemClickListener {
 
     override fun onItemClicked(key: String, localizedName: String) {
         val fragmenthome = HomeFragment()
-     //  print("key"+key)
         val args = Bundle()
-        args.putString("key", key) // Replace "key" with the actual key and add data to be passed
-        args.putString("localizedName", localizedName) // Replace "key" with the actual key and add data to be passed
+        args.putString("key", key)
+        args.putString("localizedName", localizedName)
         fragmenthome.arguments = args
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragmentView, fragmenthome)  // R.id.fragment_container is the container in the layout where the fragment will be placed
-            .addToBackStack(null)  // Adding the transaction to the back stack
+            .replace(R.id.fragmentView, fragmenthome)
+            .addToBackStack(null)
             .commit()
 
         (activity as MainActivity).updateSelectedItem(R.id.navigation_home)
     }
-
-
 }
